@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SearchFormContainer } from "./styles";
+import { useContext } from "react";
+import { TransactionsContext } from "../../../../contexts/TransactionsContext";
 
 const searchFormSchema = z.object({
   query: z.string(),
@@ -11,6 +13,8 @@ const searchFormSchema = z.object({
 type SearchFormInputs = z.infer<typeof searchFormSchema>;
 
 export function SearchForm() {
+  const { fetchTransactions } = useContext(TransactionsContext);
+
   const {
     register,
     handleSubmit,
@@ -23,9 +27,7 @@ export function SearchForm() {
   });
 
   async function handleSearchTransactions(data: SearchFormInputs) {
-    await new Promise((resolve, reject) => setTimeout(resolve, 1500));
-
-    console.log(data);
+    fetchTransactions(data.query);
   }
 
   return (
