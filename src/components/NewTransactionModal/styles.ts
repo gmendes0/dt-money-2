@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import * as Dialog from "@radix-ui/react-dialog";
-import * as RadioGroup from "@radix-ui/react-radio-group";
+import styled from 'styled-components'
+import * as Dialog from '@radix-ui/react-dialog'
+import * as RadioGroup from '@radix-ui/react-radio-group'
 
 export const Overlay = styled(Dialog.Overlay)`
   position: fixed; // mesmo com scroll, fica na mesma posição
@@ -8,13 +8,13 @@ export const Overlay = styled(Dialog.Overlay)`
   height: 100vh;
   inset: 0; // é o mesmo que escrever: top: 0; right: 0;  bottom: 0; left: 0;
   background-color: rgba(0, 0, 0, 0.75); // ou #00000075
-`;
+`
 
 export const Content = styled(Dialog.Content)`
   min-width: 32rem;
   border-radius: 6px;
   padding: 2.5rem 3rem;
-  background-color: ${(props) => props.theme["gray-800"]};
+  background-color: ${(props) => props.theme['gray-800']};
 
   position: fixed; // assim como o overlay
   top: 50%; // desloca metade do tamanho da tela para baixo
@@ -32,19 +32,19 @@ export const Content = styled(Dialog.Content)`
     input {
       border-radius: 6px;
       border: 0;
-      background-color: ${(props) => props.theme["gray-900"]};
-      color: ${(props) => props.theme["gray-300"]};
+      background-color: ${(props) => props.theme['gray-900']};
+      color: ${(props) => props.theme['gray-300']};
       padding: 1rem;
 
       &::placeholder {
-        color: ${(props) => props.theme["gray-500"]};
+        color: ${(props) => props.theme['gray-500']};
       }
     }
 
-    button[type="submit"] {
+    button[type='submit'] {
       height: 58px;
       border: 0;
-      background-color: ${(props) => props.theme["green-500"]};
+      background-color: ${(props) => props.theme['green-500']};
       color: ${(props) => props.theme.white};
       font-weight: bold;
       padding: 0 1.25rem;
@@ -54,7 +54,7 @@ export const Content = styled(Dialog.Content)`
       transition: background-color 0.2s;
 
       &:not(:disabled):hover {
-        background-color: ${(props) => props.theme["green-700"]};
+        background-color: ${(props) => props.theme['green-700']};
       }
 
       &:disabled {
@@ -63,7 +63,7 @@ export const Content = styled(Dialog.Content)`
       }
     }
   }
-`;
+`
 
 export const CloseButton = styled(Dialog.Close)`
   position: absolute;
@@ -73,24 +73,24 @@ export const CloseButton = styled(Dialog.Close)`
   right: 1.5rem;
   line-height: 0; // ajustar o tamanho outline do focus
   cursor: pointer;
-  color: ${(props) => props.theme["gray-500"]};
-`;
+  color: ${(props) => props.theme['gray-500']};
+`
 
 export const TransactionType = styled(RadioGroup.Root)`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-top: 0.5rem;
-`;
+`
 
 interface TransactionTypeButtonProps {
-  variant: "income" | "outcome";
+  variant: 'income' | 'outcome'
 }
 
 export const TransactionTypeButton = styled(
-  RadioGroup.Item
+  RadioGroup.Item,
 )<TransactionTypeButtonProps>`
-  background-color: ${(props) => props.theme["gray-700"]};
+  background-color: ${(props) => props.theme['gray-700']};
   padding: 1rem;
   display: flex;
   align-items: center;
@@ -99,35 +99,35 @@ export const TransactionTypeButton = styled(
   border-radius: 6px;
   cursor: pointer;
   border: 0;
-  color: ${(props) => props.theme["gray-300"]};
+  color: ${(props) => props.theme['gray-300']};
 
   svg {
     color: ${(props) =>
-      props.variant === "income"
-        ? props.theme["green-300"]
-        : props.theme["red-300"]};
+      props.variant === 'income'
+        ? props.theme['green-300']
+        : props.theme['red-300']};
   }
 
-  &[data-state="unchecked"] {
+  &[data-state='unchecked'] {
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: ${(props) => props.theme["gray-600"]};
+      background-color: ${(props) => props.theme['gray-600']};
     }
   }
 
   /**
   * O radix adiciona o atributo data-state e muda de check para uncheck
   */
-  &[data-state="checked"] {
+  &[data-state='checked'] {
     color: ${(props) => props.theme.white};
     background-color: ${(props) =>
-      props.variant === "income"
-        ? props.theme["green-500"]
-        : props.theme["red-500"]};
+      props.variant === 'income'
+        ? props.theme['green-500']
+        : props.theme['red-500']};
   }
 
-  &[data-state="checked"] svg {
+  &[data-state='checked'] svg {
     color: ${(props) => props.theme.white};
   }
-`;
+`

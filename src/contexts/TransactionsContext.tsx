@@ -1,13 +1,13 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
-import { api } from "../lib/axios";
+import { createContext, ReactNode, useEffect, useState } from 'react'
+import { api } from '../lib/axios'
 
 interface Transaction {
-  id: number;
-  description: string;
-  type: "income" | "outcome";
-  category: string;
-  price: number;
-  createdAt: string;
+  id: number
+  description: string
+  type: 'income' | 'outcome'
+  category: string
+  price: number
+  createdAt: string
 }
 
 /**
@@ -16,37 +16,37 @@ interface Transaction {
  * já que se eu deletar o componente, a tipagem para de existir.
  */
 interface CreateTransactionData {
-  description: string;
-  type: "income" | "outcome";
-  category: string;
-  price: number;
+  description: string
+  type: 'income' | 'outcome'
+  category: string
+  price: number
 }
 
 interface TransactionsContextType {
-  transactions: Transaction[];
-  fetchTransactions: (query?: string) => Promise<void>;
-  createTransaction: (data: CreateTransactionData) => void;
+  transactions: Transaction[]
+  fetchTransactions: (query?: string) => Promise<void>
+  createTransaction: (data: CreateTransactionData) => void
 }
 
-export const TransactionsContext = createContext({} as TransactionsContextType);
+export const TransactionsContext = createContext({} as TransactionsContextType)
 
 interface TransactionsProviderProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([])
 
   async function fetchTransactions(query?: string) {
-    const response = await api.get<Transaction[]>("transactions", {
+    const response = await api.get<Transaction[]>('transactions', {
       params: {
-        _sort: "createdAt",
-        _order: "DESC",
+        _sort: 'createdAt',
+        _order: 'DESC',
         q: query,
       },
-    });
+    })
 
-    setTransactions(response.data);
+    setTransactions(response.data)
   }
 
   /**
@@ -56,20 +56,20 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
    */
   async function createTransaction(data: CreateTransactionData) {
     try {
-      const response = await api.post("/transactions", {
+      const response = await api.post('/transactions', {
         ...data,
         createdAt: new Date(),
-      });
+      })
 
-      setTransactions((state) => [response.data, ...state]);
+      setTransactions((state) => [response.data, ...state])
     } catch (error) {
-      console.log("Não foi possível criar uma nova transação");
+      console.log('Não foi possível criar uma nova transação')
     }
   }
 
   useEffect(() => {
-    fetchTransactions();
-  }, []);
+    fetchTransactions()
+  }, [])
 
   return (
     <TransactionsContext.Provider
@@ -77,5 +77,5 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     >
       {children}
     </TransactionsContext.Provider>
-  );
+  )
 }
