@@ -1,6 +1,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { ArrowCircleDown, ArrowCircleUp, X } from "phosphor-react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import {
   CloseButton,
@@ -29,7 +29,11 @@ export function NewTransactionModal() {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<NewTransactionFormInputs>();
+  } = useForm<NewTransactionFormInputs>({
+    defaultValues: {
+      type: "income",
+    },
+  });
 
   async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
     await new Promise((resolve, reject) => setTimeout(resolve, 2000));
@@ -86,23 +90,53 @@ export function NewTransactionModal() {
             />
 
             {/**
-             * RadioGroup.Root
+             * Permite integrar campos nao nativos do HTML
+             * name: nome do input
+             * control: control do useForm
+             * render: deve retornar o componente que será o input
+             *
+             * parametros do render render:
+             *    formState: estado do form (useForm), idual ao formState do proprio useForm
+             *    fieldState: estado do campo ("type" nesse caso)
+             *    field: podemos acessar os eventos, value, ref, etc
              */}
-            <TransactionType {...register("type")}>
-              {/**
-               * RadioGroup.Item
-               */}
-              <TransactionTypeButton variant="income" value="income">
-                <ArrowCircleUp size={24} /> Entrada
-              </TransactionTypeButton>
+            <Controller
+              name="type"
+              control={control}
+              render={({ field }) => (
+                <>
+                  {/**
+                   * RadioGroup.Root
+                   *
+                   * onValueChange: é chamado quando o valor muda, ou seja
+                   * quando um outro RadioGroup.Item é selecionado
+                   *
+                   * onValueChange={field.onChange} é o mesmo que onValueChange={value => field.onChange(value)}
+                   *
+                   * É importante colocar o value={field.value} pois caso seja colocado um valor default no useForm,
+                   * ele carrega esse valor no value ao renderizar pela primeira vez
+                   */}
+                  <TransactionType
+                    onValueChange={field.onChange}
+                    value={field.value}
+                  >
+                    {/**
+                     * RadioGroup.Item
+                     */}
+                    <TransactionTypeButton variant="income" value="income">
+                      <ArrowCircleUp size={24} /> Entrada
+                    </TransactionTypeButton>
 
-              {/**
-               * RadioGroup.Item
-               */}
-              <TransactionTypeButton variant="outcome" value="outcome">
-                <ArrowCircleDown size={24} /> Saída
-              </TransactionTypeButton>
-            </TransactionType>
+                    {/**
+                     * RadioGroup.Item
+                     */}
+                    <TransactionTypeButton variant="outcome" value="outcome">
+                      <ArrowCircleDown size={24} /> Saída
+                    </TransactionTypeButton>
+                  </TransactionType>
+                </>
+              )}
+            />
 
             <button type="submit" disabled={isSubmitting}>
               Cadastrar

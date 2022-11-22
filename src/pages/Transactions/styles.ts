@@ -39,3 +39,12 @@ export const PriceHighlight = styled.span<PriceHighlightProps>`
       ? props.theme["green-300"]
       : props.theme["red-300"]};
 `;
+
+export const TransactionsNotFound = styled.p`
+  width: 100%;
+  text-align: center;
+  margin-top: 5rem;
+  color: ${(props) => props.theme["gray-300"]};
+  font-weight: bold;
+  font-size: 1.25rem;
+`;
