@@ -23,6 +23,22 @@
       "category": "Educação",
       "price": 1980,
       "createdAt": "2022-11-12T09:52:00.662Z"
+    },
+    {
+      "type": "outcome",
+      "description": "Dentista",
+      "price": 150,
+      "category": "Saúde",
+      "createdAt": "2022-11-22T22:58:58.703Z",
+      "id": 4
+    },
+    {
+      "type": "outcome",
+      "description": "Playstation 5",
+      "price": 4745,
+      "category": "Lazer",
+      "createdAt": "2022-11-22T23:19:30.271Z",
+      "id": 5
     }
   ]
 }

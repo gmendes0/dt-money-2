@@ -1,7 +1,11 @@
 import * as Dialog from "@radix-ui/react-dialog";
+import { AxiosResponse } from "axios";
 import { ArrowCircleDown, ArrowCircleUp, X } from "phosphor-react";
+import { useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+import { TransactionsContext } from "../../contexts/TransactionsContext";
+import { api } from "../../lib/axios";
 import {
   CloseButton,
   Content,
@@ -20,6 +24,8 @@ const newTransactionFormSchema = z.object({
 type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>;
 
 export function NewTransactionModal() {
+  const { createTransaction } = useContext(TransactionsContext);
+
   /**
    * Sempre que precisarmos incluir uma info no form que nao vem de um elemento nativo do HTML,
    * precisamos usar o control
@@ -28,6 +34,7 @@ export function NewTransactionModal() {
     control,
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting },
   } = useForm<NewTransactionFormInputs>({
     defaultValues: {
@@ -36,9 +43,9 @@ export function NewTransactionModal() {
   });
 
   async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
-    await new Promise((resolve, reject) => setTimeout(resolve, 2000));
+    createTransaction(data);
 
-    console.log(data);
+    reset();
   }
 
   return (
