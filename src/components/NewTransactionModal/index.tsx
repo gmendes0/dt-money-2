@@ -1,7 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
-import { useContext } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useContextSelector } from 'use-context-selector'
 import { z } from 'zod'
 import { TransactionsContext } from '../../contexts/TransactionsContext'
 import {
@@ -22,7 +22,30 @@ const newTransactionFormSchema = z.object({
 type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>
 
 export function NewTransactionModal() {
-  const { createTransaction } = useContext(TransactionsContext)
+  /**
+   * Como o state transactions do provider muda, o componente TransactionsProvider
+   * é renderizado novamente, e todas as funções/variaveis são recridas em memória,
+   * isso faz com que o valor passado para o TransactionsContext.Provider mude e o
+   * contexto mude. Portanto, mesmo que o que mudou nao foi a função `createTransaction`,
+   * o NewTransactionModal acaba renderizando novamente porque o contexto mudou. Isso
+   * seria resolvido se o React permitisse que a gente selecionasse qual valor do
+   * contexto queremos observar, esse metodo é chamado de "selector". Nativamente o
+   * React nao possui essa função, então podemos utilizar a lib "use-context-selector"
+   * que permite com que a gente obtenha essa funcionalidade sem ter que alterar muito
+   * a forma com que utilizamos a context api.
+   *
+   * Na forma nativa do React, para buscarmos uma info do contexto fazemos o seguinte:
+   *
+   * `const { createTransaction } = useContext(TransactionsContext)`
+   *
+   * Com o "use-context-selector", fazemos da seguinte forma:
+   *
+   * const transactions = useContextSelector(TransactionsContext, ctx => ctx.transactions)
+   */
+  const createTransaction = useContextSelector(
+    TransactionsContext,
+    (context) => context.createTransaction,
+  )
 
   /**
    * Sempre que precisarmos incluir uma info no form que nao vem de um elemento nativo do HTML,
