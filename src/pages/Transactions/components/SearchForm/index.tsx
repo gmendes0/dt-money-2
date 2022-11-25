@@ -34,6 +34,9 @@ import { memo } from 'react'
  * pois o deep comparison pode ser mais custoso que recriar o HTML em memória
  * e comparar as versões.
  *
+ * Nesse caso nao vale a pena utilizar o memo, pois o compnente é
+ * bem simples.
+ *
  */
 
 const searchFormSchema = z.object({
@@ -42,7 +45,7 @@ const searchFormSchema = z.object({
 
 type SearchFormInputs = z.infer<typeof searchFormSchema>
 
-function SearchFormComponent() {
+export function SearchForm() {
   const fetchTransactions = useContextSelector(
     TransactionsContext,
     (context) => context.fetchTransactions,
@@ -77,9 +80,3 @@ function SearchFormComponent() {
     </SearchFormContainer>
   )
 }
-
-/**
- * Nesse caso nao vale a pena utilizar o memo, pois o compnente é
- * bem simples.
- */
-export const SearchForm = memo(SearchFormComponent)
