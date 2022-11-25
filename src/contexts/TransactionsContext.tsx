@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { createContext } from 'use-context-selector'
 import { api } from '../lib/axios'
 
@@ -42,7 +42,7 @@ interface TransactionsProviderProps {
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([])
 
-  async function fetchTransactions(query?: string) {
+  const fetchTransactions = useCallback(async (query?: string) => {
     const response = await api.get<Transaction[]>('transactions', {
       params: {
         _sort: 'createdAt',
@@ -52,14 +52,17 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     })
 
     setTransactions(response.data)
-  }
+  }, [])
 
   /**
    * É melhor fazer com que o context faça o cadastro e atualize o transactions ao invés de expor uma
    * função que atualize o estado transactions, pois com isso seria possível que qualquer componente
    * alterasse o estado da maneira que ele quisesse.
+   *
+   * O useCalback faz com que a função não seja recriada em memória durante as renderizações caso
+   * nenhuma das informações da qual a função depende tenha sido alterada
    */
-  async function createTransaction(data: CreateTransactionData) {
+  const createTransaction = useCallback(async (data: CreateTransactionData) => {
     try {
       const response = await api.post('/transactions', {
         ...data,
@@ -70,7 +73,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     } catch (error) {
       console.log('Não foi possível criar uma nova transação')
     }
-  }
+  }, [])
 
   useEffect(() => {
     fetchTransactions()
