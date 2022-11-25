@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SearchFormContainer } from './styles'
 import { TransactionsContext } from '../../../../contexts/TransactionsContext'
 import { useContextSelector } from 'use-context-selector'
-import { memo } from 'react'
 
 /**
  * Por que um componente renderiza no React:
